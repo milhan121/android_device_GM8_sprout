@@ -5,17 +5,22 @@
 #
 
 # Inherit from GM8_sprout device
+
 $(call inherit-product, device/gm/GM8_sprout/device.mk)
 
-# Inherit some common Arrow stuff.
-$(call inherit-product, vendor/arrow/config/common.mk)
+# Inherit some common lineage stuff.
+$(call inherit-product, vendor/lineage/config/common.mk)
+
+# Inherit from those products. Most specific first.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Device identifier. This must come after all inclusions.
-PRODUCT_NAME := arrow_GM8_sprout
+PRODUCT_NAME := lineage_GM8_sprout
 PRODUCT_DEVICE := GM8_sprout
 PRODUCT_BRAND := GM
 PRODUCT_MODEL := GM 8
-PRODUCT_MANUFACTURER := General_Mobile
+PRODUCT_MANUFACTURER := General Mobile
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
     PRIVATE_BUILD_DESC="msm8937_64-user 9 OPM1.171019.011 eng.scm.20210302.164620 release-keys"
@@ -26,5 +31,3 @@ TARGET_SCREEN_WIDTH := 720
 TARGET_SCREEN_HEIGHT := 1440
 
 TARGET_INCLUDE_PIXEL_CHARGER := true
-
-DEVICE_MAINTAINER := noonlord

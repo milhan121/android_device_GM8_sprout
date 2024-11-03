@@ -1,9 +1,5 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_o_mr1.mk)
 
-# Inherit from those products. Most specific first.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
-
 # Setup dalvik vm configs
 $(call inherit-product, frameworks/native/build/phone-xhdpi-4096-dalvik-heap.mk)
 
@@ -19,11 +15,16 @@ PRODUCT_PACKAGES += \
     android.hardware.boot@1.0-impl.recovery \
     bootctrl.msm8937.recovery
 
+
 PRODUCT_PACKAGES += \
     android.hardware.boot@1.0-impl \
     android.hardware.boot@1.0-service \
     bootctrl.msm8937
-
+    
+# Connectivity Engine support (CNE)
+PRODUCT_PACKAGES += \
+    services-ext
+    
 # Audio
 PRODUCT_PACKAGES += \
     audiod \
@@ -110,6 +111,10 @@ PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-service \
     android.hardware.drm@1.3-service.clearkey
 
+# Lineage Health
+PRODUCT_PACKAGES += \
+    vendor.lineage.health-service.default
+    
 # FM
 PRODUCT_PACKAGES += \
     FMRadio \
@@ -127,8 +132,13 @@ PRODUCT_PACKAGES += \
 # HIDL
 PRODUCT_PACKAGES += \
     android.hidl.base@1.0 \
-    android.hidl.manager@1.0
-
+    android.hidl.base@1.0_system \
+    android.hidl.manager@1.0 \
+    android.hidl.manager@1.0-java \
+    libhidltransport \
+    libhidltransport.vendor \
+    libhwbinder \
+    libhwbinder.vendor
 
 PRODUCT_PACKAGES += \
     libhidltransport \
@@ -264,8 +274,12 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     telephony-ext
 
-PRODUCT_BOOT_JARS += \
-    telephony-ext
+# VNDK
+PRODUCT_COPY_FILES += \
+    prebuilts/vndk/v29/arm64/arch-arm-armv8-a/shared/vndk-core/libprotobuf-cpp-full.so:$(TARGET_COPY_OUT_VENDOR)/lib/libprotobuf-cpp-full.so \
+    prebuilts/vndk/v29/arm64/arch-arm-armv8-a/shared/vndk-core/libprotobuf-cpp-lite.so:$(TARGET_COPY_OUT_VENDOR)/lib/libprotobuf-cpp-lite.so \
+    prebuilts/vndk/v29/arm64/arch-arm64-armv8-a/shared/vndk-core/libprotobuf-cpp-full.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libprotobuf-cpp-full.so \
+    prebuilts/vndk/v29/arm64/arch-arm64-armv8-a/shared/vndk-core/libprotobuf-cpp-lite.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libprotobuf-cpp-lite.so
 
 # Toybox
 PRODUCT_PACKAGES += toybox_vendor
@@ -274,15 +288,18 @@ PRODUCT_PACKAGES += toybox_vendor
 PRODUCT_PACKAGES += \
     android.hardware.usb@1.0-service.basic
 
+#BPF
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.kernel.ebpf.supported=false
+    
 # VNDK
 PRODUCT_PACKAGES += \
     libgui_vendor
-
-PRODUCT_COPY_FILES += \
-    prebuilts/vndk/v29/arm64/arch-arm-armv8-a/shared/vndk-core/libprotobuf-cpp-full.so:$(TARGET_COPY_OUT_VENDOR)/lib/libprotobuf-cpp-full.so \
-    prebuilts/vndk/v29/arm64/arch-arm-armv8-a/shared/vndk-core/libprotobuf-cpp-lite.so:$(TARGET_COPY_OUT_VENDOR)/lib/libprotobuf-cpp-lite.so \
-    prebuilts/vndk/v29/arm64/arch-arm64-armv8-a/shared/vndk-core/libprotobuf-cpp-full.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libprotobuf-cpp-full.so \
-    prebuilts/vndk/v29/arm64/arch-arm64-armv8-a/shared/vndk-core/libprotobuf-cpp-lite.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libprotobuf-cpp-lite.so
+    
+# Gatekeeper HAL
+PRODUCT_PACKAGES += \
+    android.hardware.gatekeeper@1.0-impl:64 \
+    android.hardware.gatekeeper@1.0-service
 
 # WiFi
 PRODUCT_PACKAGES += \
